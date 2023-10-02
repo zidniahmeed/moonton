@@ -1,0 +1,9 @@
+.input-primary{
+    @apply focus:bg-form-bg bg-form-bg focus:outline-alerange focus:outline-none;
+}
+.input-error{
+    @apply ring ring-red-500;
+}
+.input-primary-outline{
+    @apply bg-[#fff] focus:bg-[#fff] border-alerange focus:bg-alerange
+}
