@@ -44,7 +44,7 @@ function FeaturedMovie({ slug, name, category, thumbnail, rating = 0 }) {
                 </div>
             </div>
             <Link
-                href={route("prototype.movie.show",slug)}
+                href={route("user.dashboard.movie.show",slug)}
                 className="inset-0 absolute z-50"
             ></Link>
         </div>

@@ -1,7 +1,10 @@
+import { useEffect } from "react";
+
 import Label from "@/Components/Label";
 import Input from "@/Components/Input";
 import Button from "@/Components/Button";
-import { Head, Link } from "@inertiajs/react";
+import InputError from "@/Components/InputError";
+import { Head, Link, useForm } from "@inertiajs/react";
 
 function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -16,16 +19,14 @@ function Register() {
             reset("password", "password_confirmation");
         };
     }, []);
-
-    const onHandleChange = (event) => {
-        setData(event.target.name, event.target.value);
-    };
-
+    const  onHandleChange = (event) => {
+        setData(event.target.name, event.target.value)
+    }
     const submit = (e) => {
         e.preventDefault();
-
         post(route("register"));
     };
+
     return (
         <>
             <Head title="Register" />
@@ -49,7 +50,7 @@ function Register() {
                                 the better insight for your life
                             </p>
                         </div>
-                        <form className="w-[370px]">
+                        <form className="w-[370px]" onSubmit={submit}>
                             <div className="flex flex-col gap-6">
                                 <div>
                                     <Label
@@ -61,10 +62,15 @@ function Register() {
                                         type="text"
                                         name="name"
                                         value={data.name}
-                                        placeholder="Your fullname..."
+                                        className="mt-1 block w-full"
+                                        autoComplete='name'
                                         isFocused={true}
                                         handleChange={onHandleChange}
                                         required
+                                    />
+                                    <InputError
+                                        message={errors.name}
+                                        className="mt-2"
                                     />
                                 </div>
                                 <div>
@@ -76,9 +82,14 @@ function Register() {
                                         type="email"
                                         name="email"
                                         value={data.email}
-                                        placeholder="Your Email Address"
+                                        className="mt-1 block w-full"
+                                        autoComplete='name'
                                         handleChange={onHandleChange}
                                         required
+                                    />
+                                    <InputError
+                                        message={errors.email}
+                                        className="mt-2"
                                     />
                                 </div>
                                 <div>
@@ -94,6 +105,10 @@ function Register() {
                                         handleChange={onHandleChange}
                                         required
                                     />
+                                    <InputError
+                                        message={errors.password}
+                                        className="mt-2"
+                                    />
                                 </div>
                                 <div>
                                     <Label
@@ -103,20 +118,23 @@ function Register() {
                                     <Input
                                         type="password"
                                         name="password_confirmation"
-                                        value={data.password_confirmation}
                                         placeholder="Your Password"
                                         handleChange={onHandleChange}
                                         required
                                     />
+                                    <InputError
+                                        message={errors.password_confirmation}
+                                        className="mt-2"
+                                    />
                                 </div>
                             </div>
                             <div className="grid space-y-[14px] mt-[30px]">
-                                <Button type="submit" processing={processing}>
-                                    <span className="text-base font-semibold">
-                                        Sign Up
-                                    </span>
-                                </Button>
-                                <Link href={route("prototype.login")}>
+                                    <Button type="submit" disabled={processing}>
+                                        <span className="text-base font-semibold">
+                                            Sign Up
+                                        </span>
+                                    </Button>
+                                <Link href={route("login")}>
                                     <Button variant="light-outline">
                                         <span className="text-base text-white">
                                             Sign In to My Account
