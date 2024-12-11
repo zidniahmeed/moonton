@@ -1,7 +1,11 @@
 import SubscriptionCard from "@/Components/SubscriptionCard";
 import Authenticated from "@/Layouts/Authenticated/Index";
+import { router } from '@inertiajs/react'
 
 export default function SubscriptionPlan({ auth, subscriptionPlans }) {
+    const selectSubscription = id => {
+        router.post(route("user.dashboard.subscriptionPlan.userSubscribe", {subscriptionPlan: id}))
+    }
     return (
         <Authenticated auth={auth}>
             <div className="ml-[300px] px-[50px]">
@@ -26,6 +30,7 @@ export default function SubscriptionPlan({ auth, subscriptionPlans }) {
                                 features={JSON.parse(subscriptionPlan.features)}
                                 ispremium={subscriptionPlan.name === "Premium"}
                                 key={subscriptionPlan.id}
+                                onSelectSubscription = {() => selectSubscription(subscriptionPlan.id)}
                             />
                             
                         ))}
