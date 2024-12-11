@@ -3,7 +3,7 @@ export default function SubscriptionDetail({name,isPremium, remainingActiveDays,
         <>
         {/* BASIC */}
 
-        { !isPremium &&   (<div className="mt-auto pr-[30px]">
+        { isPremium &&   (<div className="mt-auto pr-[30px]">
                 <div className="mt-auto pr-[30px]">
                     <div className="p-5 bg-black rounded-[25px]">
                         <img src="/icons/ic_star-rounded.svg" alt="" />
@@ -21,7 +21,7 @@ export default function SubscriptionDetail({name,isPremium, remainingActiveDays,
             </div>)}
             {/* PRREMIUM */}
 
-            {isPremium && (<div className="mt-auto pr-[30px]">
+            {!isPremium && (<div className="mt-auto pr-[30px]">
                 <div className="mt-auto pr-[30px]">
                     <div className="p-5 bg-white rounded-[25px] outline outline-1 outline-[#f1f1f1]">
                         <div className="text-black text-lg font-semibold mb-8">

@@ -15,7 +15,7 @@ function Dashboard({auth, featuredMovies,movies}) {
         draggable: ">1",
     };
     return (
-        <Authenticated auth={auth.user}>
+        <Authenticated auth={auth}>
             <Head>
                 <link
                     rel="stylesheet"

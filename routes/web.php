@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\DahboardController;
+use App\Http\Controllers\Admin\MovieController as AdminMovieController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -25,11 +27,16 @@ Route::redirect('/', '/login');
 
 Route::middleware(['auth','role:user'])->prefix('dashboard')->name('user.dashboard')->group(function (){
     Route::get('/', [DahboardController::class, 'index'])->name('.index');
-    Route::get('/movie/{movie:slug}', [MovieController::class, 'show'])->name('.movie.show');
-    Route::get('/subscription-plan', [SubscriptionPlanController::class, 'index'])->name('.subscriptionPlan.index');
-    Route::post('/subscription-plan/{subscriptionPlan}/user-subscribe', [SubscriptionPlanController::class, 'userSubscribe'])->name('.subscriptionPlan.userSubscribe');
+    Route::get('/movie/{movie:slug}', [MovieController::class, 'show'])->name('.movie.show')->middleware('checkUserSubscription:true');
+    Route::get('/subscription-plan', [SubscriptionPlanController::class, 'index'])->name('.subscriptionPlan.index')->middleware('checkUserSubscription:false');
+    Route::post('/subscription-plan/{subscriptionPlan}/user-subscribe', [SubscriptionPlanController::class, 'userSubscribe'])->name('.subscriptionPlan.userSubscribe')->middleware('checkUserSubscription:false');
 
     
+});
+
+Route::middleware(['auth','role:admin'])->prefix('admin')->name('admin.dashboard.')->group(function (){
+    Route::resource('movie',AdminMovieController::class);
+
 });
 
 

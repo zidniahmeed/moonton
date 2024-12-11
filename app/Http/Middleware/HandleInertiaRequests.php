@@ -26,31 +26,22 @@ class HandleInertiaRequests extends Middleware
     }
 
     private function activePlan()
-{
-    $activePlan = Auth::user()?->lastActiveUserSubscription;
+    {
+        $activePlan = Auth::user() ? Auth::user()->LastActiveUserSubscription : null;
+        if (!$activePlan) {
+            return null;
+        }
 
-    if (!$activePlan) {
-        return null;
+        $lastDay = Carbon::parse($activePlan->updated_at)->addMonths($activePlan->subscriptionPlan->active_period_in_months ?? null);
+        $activeDays = Carbon::parse($activePlan->updated_at)->diffInDays($lastDay);
+        $remaingActiveDays = Carbon::parse($activePlan->expired_date)->diffInDays(Carbon::now());
+
+        return [
+            'name' => $activePlan->subscriptionPlan->name ?? null,
+            'remainingActiveDays' => $remaingActiveDays ?? null,
+            'activeDays' => $activeDays ?? null,
+        ];
     }
-
-    $updatedAt = $activePlan->updated_at ? Carbon::parse($activePlan->updated_at) : null;
-    $expiredDate = $activePlan->expired_date ? Carbon::parse($activePlan->expired_date) : null;
-    $activePeriodMonths = $activePlan->subscriptionPlan->active_period_in_months ?? 0;
-
-    if (!$updatedAt || !$expiredDate) {
-        return null;
-    }
-
-    $lastDay = $updatedAt->addMonths($activePeriodMonths);
-    $activeDays = $updatedAt->diffInDays($lastDay);
-    $remainingActiveDays = Carbon::now()->diffInDays($expiredDate, false); // Include negative if expired
-
-    return [
-        'name' => $activePlan->subscriptionPlan->name ?? 'Unknown Plan',
-        'remainingActiveDays' => max($remainingActiveDays, 0), // Ensure no negative active days
-        'activeDays' => $activeDays,
-    ];
-}
 
  
     /**
@@ -64,7 +55,7 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
-                'activePlan' => 'hehe'
+                'activePlan' => $this->activePlan()
             ],
             'ziggy' => fn () => [
                 ...(new Ziggy)->toArray(),
