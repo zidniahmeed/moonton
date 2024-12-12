@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Movie;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\Admin\Movie\Store;
 
 class MovieController extends Controller
 {
@@ -27,9 +30,17 @@ class MovieController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Store $request)
     {
-        //
+        $data = $request->validated();
+        $data['thumbnail'] = Storage::disk('public')->put('movies', $request->file('thumbnail'));
+        $data['slug'] = Str::slug($data['name']);
+        $movie = Movie::create($data);
+
+        return redirect(route('admin.dashboard.movie.index'))->with([
+            'message' => "Movie inserted successfully",
+            'type' => 'success'
+        ]);
     }
 
     /**
@@ -37,7 +48,7 @@ class MovieController extends Controller
      */
     public function show(Movie $movie)
     {
-        //
+        
     }
 
     /**

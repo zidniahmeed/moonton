@@ -1,4 +1,4 @@
-export default function Checkbox({ className = '', ...props }) {
+export default function Checkbox({ name, value, handleChange, checked = false, className = '', ...props }) {
     return (
         <input
             {...props}
